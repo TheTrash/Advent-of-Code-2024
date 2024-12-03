@@ -24,8 +24,7 @@ for row in matrix:
     desc = False
     desc_c = 0
     print(row)
-    i = 0
-    while(i < len(row)):
+    for i in range(1,len(row)):
         print(i)
         if row[i-1] > row[i] and asc == False:
             if 0 < (row[i-1] - row[i]) < 4:
@@ -38,8 +37,7 @@ for row in matrix:
                 asc = True
                 asc_c +=1
             else:
-                break 
-        i+=1                
+                break              
     if asc_c == len(row)-1:
         #print("good asc")
         safe +=1
