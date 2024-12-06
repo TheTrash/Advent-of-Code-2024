@@ -38,12 +38,20 @@ def check_pages_validity(pages,verb = True):
     #print(pages, res)
     return pages, swap
 
-verbose = True
+
+
+
+
+verbose = False
 rules = {}
 i = 0
 first = True
 valid_pages = []
 invalid_pages = []
+s = 0
+
+import time
+start_time = time.time_ns()
 for l in f.readlines():
     if l != "\n" and first:
         rule = l.replace("\n","").split("|")
@@ -60,19 +68,16 @@ for l in f.readlines():
         
         pages = l.replace("\n","").split(",")
         pages, resp = check_pages_validity(pages, False)
-        print(resp, pages)
+        if verbose: print(resp, pages)
         if resp == False:
-            valid_pages.append(pages)
+            #valid_pages.append(pages)
+            pass
         else:
             while(resp == True):
                 pages, resp = check_pages_validity(pages, False)
-            invalid_pages.append(pages)
-        
+            #invalid_pages.append(pages)
+            s += int(pages[int(len(pages)/2)])
 
+end_time = time.time_ns()
 
-s = 0
-for pages in invalid_pages:
-    print(pages, pages[int(len(pages)/2)])
-    s += int(pages[int(len(pages)/2)])
-
-print(s)
+print(s, f"elapsed time {end_time-start_time}")
