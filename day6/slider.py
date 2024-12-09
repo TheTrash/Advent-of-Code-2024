@@ -23,20 +23,32 @@ def create_matrix(rows):
 
     return mapp
 
-def is_within_bounds(position, matrix_size):
-    rows, cols = matrix_size
+def is_within_bounds(position):
+    rows, cols = (len(matrix),len(matrix[0]))
     row, col = position
     return 0 <= row < rows and 0 <= col < cols
 
 def go_on(position, direction):
     global step
     x = position[0]
-    y = position[1] 
-    while( matrix[x][y] != "#"):
+    y = position[1]
+
+    x_n = x + directions[direction][0]
+    y_n = y + directions[direction][1]
+    while(matrix[x_n ][y_n] != "#"):
+        if matrix[x][y] != "X":
+            step+=1
         matrix[x][y] = "X"
-        x  += directions[direction][0]
-        y  += directions[direction][1]
-        step += 1
+        x += directions[direction][0]
+        y += directions[direction][1]
+        x_n = x + directions[direction][0]
+        y_n = y + directions[direction][1]
+        if not(is_within_bounds((x_n,y_n))):
+            matrix[x][y] = "X"
+            step += 1
+            return (x_n,y_n), "end"
+
+        
     return (x,y), next_direction(direction)
     
 def next_direction(direction):
@@ -44,7 +56,7 @@ def next_direction(direction):
     next_index = (order.index(direction) + 1) % len(order)
     return order[next_index]
 
-f = open("example.txt", "r")
+f = open("input.txt", "r")
 l = [  n.replace("\n","" ) for n in f.readlines()  ]
 
 matrix = create_matrix(l)
@@ -70,12 +82,14 @@ for i in range(len(matrix)):
 
 
 next_position = (position[0]+directions[direction][0],position[1]+directions[direction][1])
-while(is_within_bounds(next_position,matrix_size=(len(matrix),len(matrix[0])))):
+while(is_within_bounds(next_position)):
       position, direction = go_on(position,direction)
-      print(position, direction)
-      print("new step")
-      beauty_print(matrix)
-      var = input()
+      #print(position, direction)
+      #print("total step ", step)
+      #beauty_print(matrix)
+      if direction == "end":
+          break
+      #var = input()
       
 print(step)
 
